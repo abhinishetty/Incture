@@ -1,0 +1,178 @@
+import React from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+
+const Form = () => {
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .required("Name is required")
+      .min(3, "min 3 characters"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: Yup.string()
+      .min(7, "Password must be at least 7 characters")
+      .required("Password is required"),
+    confirmpassword: Yup.string()
+      .required("Confirm Password is required")
+      .oneOf([Yup.ref("password")], "Passwords must match"),
+    gender: Yup.string().required("Gender is required"),
+    city: Yup.string().required("City is required"),
+    terms: Yup.boolean()
+      .oneOf([true], "Please accept terms and conditions")
+      .required("Required"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmpassword: "",
+      gender: "",
+      city: "",
+      terms: false,
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      alert("Registration successful: " + JSON.stringify(values, null, 2));
+    },
+  });
+
+  return (
+    <div style={{ maxWidth: "500px", margin: "auto", padding: "20px" }}>
+      <h2>Register:</h2>
+      <form onSubmit={formik.handleSubmit}>
+        {/* Name input */}
+        <div style={{ marginBottom: "10px" }}>
+          <label>Name: </label>
+          <input
+            type="text"
+            name="name"
+            placeholder="Enter name"
+            value={formik.values.name}
+            onChange={formik.handleChange}
+          />
+          {formik.touched.name && formik.errors.name && (
+            <div style={{ color: "red" }}>{formik.errors.name}</div>
+          )}
+        </div>
+
+        {/* Email input */}
+        <div style={{ marginBottom: "10px" }}>
+          <label>Email: </label>
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+          />
+          {formik.touched.email && formik.errors.email && (
+            <div style={{ color: "red" }}>{formik.errors.email}</div>
+          )}
+        </div>
+
+        {/* Password input */}
+        <div style={{ marginBottom: "10px" }}>
+          <label>Password: </label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+          />
+          {formik.touched.password && formik.errors.password && (
+            <div style={{ color: "red" }}>{formik.errors.password}</div>
+          )}
+        </div>
+
+        {/* Confirm password */}
+        <div style={{ marginBottom: "10px" }}>
+          <label>Confirm Password: </label>
+          <input
+            type="password"
+            name="confirmpassword"
+            placeholder="Confirm password"
+            value={formik.values.confirmpassword}
+            onChange={formik.handleChange}
+          />
+          {formik.touched.confirmpassword && formik.errors.confirmpassword && (
+            <div style={{ color: "red" }}>{formik.errors.confirmpassword}</div>
+          )}
+        </div>
+
+        {/* Gender radio buttons */}
+        <div style={{ marginBottom: "10px" }}>
+          <label>Gender: </label>
+          <label>
+            <input
+              type="radio"
+              name="gender"
+              value="male"
+              onChange={formik.handleChange}
+              checked={formik.values.gender === "male"}
+            />
+            Male
+          </label>
+          <label style={{ marginLeft: "10px" }}>
+            <input
+              type="radio"
+              name="gender"
+              value="female"
+              onChange={formik.handleChange}
+              checked={formik.values.gender === "female"}
+            />
+            Female
+          </label>
+          {formik.touched.gender && formik.errors.gender && (
+            <div style={{ color: "red" }}>{formik.errors.gender}</div>
+          )}
+        </div>
+
+        {/* City Dropdown */}
+        <div style={{ marginBottom: "10px" }}>
+          <label>City: </label>
+          <br />
+          <select
+            name="city"
+            value={formik.values.city}
+            onChange={formik.handleChange}
+          >
+            <option value="" label="Select city" />
+            <option value="Mangaluru" label="Mangaluru" />
+            <option value="Bengaluru" label="Bengaluru" />
+            <option value="Mysore" label="Mysore" />
+            <option value="Udupi" label="Udupi" />
+            <option value="Kundapur" label="Kundapur" />
+          </select>
+          {formik.touched.city && formik.errors.city && (
+            <div style={{ color: "red" }}>{formik.errors.city}</div>
+          )}
+        </div>
+
+        {/* Terms and Conditions */}
+        <div style={{ marginBottom: "10px" }}>
+          <input
+            type="checkbox"
+            name="terms"
+            checked={formik.values.terms}
+            onChange={formik.handleChange}
+          />
+          <label style={{ marginLeft: "5px" }}>
+            Terms and conditions: I accept that my data may be used for educational
+            purposes.
+          </label>
+          {formik.touched.terms && formik.errors.terms && (
+            <div style={{ color: "red" }}>{formik.errors.terms}</div>
+          )}
+        </div>
+
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  );
+};
+
+export default Form;
