@@ -1,1 +1,466 @@
+import React, { useState } from "react";
+import { useFormik } from "formik";
+import Select from "react-select";
+import * as Yup from "yup";
+
+const MyForm = () => {
+   const [preview, setPreview] = useState(null);
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .min(3, "Min 3 characters required")
+      .required("Name is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    phone: Yup.string()
+      .matches(/^\d{10}$/, "Phone number must be exactly 10 digits")
+      .required("Phone number is required"),
+    dob: Yup.date()
+      .max(
+        new Date(new Date().setFullYear(new Date().getFullYear() - 18)),
+        "You must be at least 18 years old"
+      )
+      .required("Date of Birth is required"),
+       profilePhoto: Yup.mixed()
+       .required("Profile photo is required"),
+       employeeId: Yup.string()
+      .matches(/^[a-zA-Z0-9]+$/, "Employee ID must be alphanumeric")
+      .required("Employee ID is required"),
+      Department:Yup.string()
+      .required("Department is required"),
+       role: Yup.string()
+       .required("enter the role"),
+      joiningDate: Yup.date()
+  .min(
+    new Date(new Date().setHours(0, 0, 0, 0)),
+    "Joining date cannot be in the past"
+  )
+  .required("Joining date is required"),
+  workLocation: Yup.string().required("Work Location is required"),
+
+bankAccount: Yup.string()
+  .matches(/^\d{9,18}$/, "Bank Account Number must be 9 to 18 digits")
+  .required("Bank Account Number is required"),
+
+ifsc: Yup.string()
+  .matches(/^[A-Z]{4}0[A-Z0-9]{6}$/, "Invalid IFSC Code")
+  .required("IFSC Code is required"),
+
+pan: Yup.string()
+  .matches(/^[A-Z]{5}[0-9]{4}[A-Z]$/, "Invalid PAN Number")
+  .required("PAN Number is required"),
+
+upi: Yup.string()
+  .matches(/^[\w.-]+@[\w]+$/, "Invalid UPI ID")
+  .notRequired()
+  .nullable(),
+
+
+  emergencyName: Yup.string()
+  .min(3, "Min 3 characters required")
+  .required("Emergency contact name is required"),
+
+emergencyRelation: Yup.string()
+  .required("Emergency contact relation is required"),
+
+emergencyPhone: Yup.string()
+  .matches(/^\d{10}$/, "Phone number must be exactly 10 digits")
+  .required("Emergency contact phone is required"),
+
+document: Yup.array()
+    .min(1, "At least one document is required")
+    .max(5, "Maximum 5 documents allowed")
+    .of(
+      Yup.mixed()
+        .test(
+          "fileFormat",
+          "Only PDF files are allowed",
+          (value) => value && value.type === "application/pdf"
+        )
+    )
+
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      phone: "",
+      dob: "",
+      profilePhoto: null,
+      employeeId:"",
+      Department:"",
+      role:"",
+       joiningDate: "", 
+       workLocation: "",
+       bankAccount: "",
+     ifsc: "",
+     pan: "",
+      upi: "",
+      emergencyName: "",
+  emergencyRelation: "",
+  emergencyPhone: "",
+  document:[],
+
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      alert("Registration successful:\n" + JSON.stringify(values, null, 2));
+    },
+  });
+  const locationOptions = [
+  { value: "Bangalore", label: "Bangalore" },
+  { value: "Hyderabad", label: "Hyderabad" },
+  { value: "Mumbai", label: "Mumbai" },
+  { value: "Delhi", label: "Delhi" },
+];
+  const handleFileChange = (event) => {
+    const file = event.currentTarget.files[0];
+    formik.setFieldValue("profilePhoto", file);
+    if (file) {
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+  const handleDocumentChange = (event) => {
+  const files = Array.from(event.currentTarget.files);
+
+ 
+  const availableSlots = 5 - formik.values.document.length;
+
+  
+  const filesToAdd = files.slice(0, availableSlots);
+
+  const updatedFiles = [...formik.values.document, ...filesToAdd];
+
+  formik.setFieldValue("document", updatedFiles);
+  formik.setFieldTouched("document", true);
+};
+
+
+const removeDocument = (index) => {
+  const updatedFiles = [...formik.values.document];
+  updatedFiles.splice(index, 1);
+  formik.setFieldValue("document", updatedFiles);
+};
+
+
+  return (
+    <div style={{ maxWidth: "500px", margin: "auto", padding: "20px" }}>
+      <h2>Personal details:</h2>
+
+      <form onSubmit={formik.handleSubmit}>
+        <div style={{ marginBottom: "10px" }}>
+          <label>Name: </label>
+          <input
+            type="text"
+            name="name"
+            value={formik.values.name}
+            onChange={formik.handleChange}
+          />
+          {formik.touched.name && formik.errors.name && (
+            <div style={{ color: "red" }}>{formik.errors.name}</div>
+          )}
+        </div>
+
+        <div style={{ marginBottom: "10px" }}>
+          <label>Email: </label>
+          <input
+            type="email"
+            name="email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+          />
+          {formik.touched.email && formik.errors.email && (
+            <div style={{ color: "red" }}>{formik.errors.email}</div>
+          )}
+        </div>
+
+        <div style={{ marginBottom: "10px" }}>
+          <label>Phone: </label>
+          <input
+            type="text"
+            name="phone"
+            value={formik.values.phone}
+            onChange={formik.handleChange}
+          />
+          {formik.touched.phone && formik.errors.phone && (
+            <div style={{ color: "red" }}>{formik.errors.phone}</div>
+          )}
+        </div>
+
+        <div style={{ marginBottom: "10px" }}>
+          <label>Date of Birth: </label>
+          <input
+            type="date"
+            name="dob"
+            value={formik.values.dob}
+            onChange={formik.handleChange}
+          />
+          {formik.touched.dob && formik.errors.dob && (
+            <div style={{ color: "red" }}>{formik.errors.dob}</div>
+          )}
+        </div>
+
+          {/* Profile Photo */}
+        <div style={{ marginBottom: "10px" }}>
+          <label>Profile Photo: </label>
+          <input
+            type="file"
+            name="profilePhoto"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+          {formik.touched.profilePhoto && formik.errors.profilePhoto && (
+            <div style={{ color: "red" }}>{formik.errors.profilePhoto}</div>
+          )}
+          {preview && (
+            <div style={{ marginTop: "10px" }}>
+              <img
+                src={preview}
+                alt="Profile Preview"
+                style={{ width: "100px", height: "100px", objectFit: "cover" }}
+              />
+            </div>
+          )}
+        </div>
+<h2>Job Details:</h2>
+          {/* Employee ID */}
+        <div style={{ marginBottom: "10px" }}>
+          <label>Employee ID: </label>
+          <input
+            type="text"
+            name="employeeId"
+            value={formik.values.employeeId}
+            onChange={formik.handleChange}
+          />
+          {formik.touched.employeeId && formik.errors.employeeId && (
+            <div style={{ color: "red" }}>{formik.errors.employeeId}</div>
+          )}
+        </div>
+
+
+        {/* Department Dropdown */}
+        <div style={{ marginBottom: "10px" }}>
+          <label>Department: </label>
+          <br />
+          <select
+            name="Department"
+            value={formik.values.Department}
+            onChange={formik.handleChange}
+          >
+            <option value="" label="Select Department" />
+            <option value="Engineering" label="Engineering" />
+            <option value="HR" label="HR" />
+            <option value="Sales" label="Sales" />
+           
+          </select>
+          {formik.touched.Department && formik.errors.Department && (
+            <div style={{ color: "red" }}>{formik.errors.Department}</div>
+          )}
+        </div>
+
+              {/* Role */}
+     
+        <div style={{ marginBottom: "10px" }}>
+          <label>Role: </label>
+          <input
+            type="text"
+            name="role"
+            value={formik.values.role}
+            onChange={formik.handleChange}
+          />
+          {formik.touched.role && formik.errors.role && (
+            <div style={{ color: "red" }}>{formik.errors.role}</div>
+          )}
+        </div>
+
+              {/* Joining date */}
+        <div style={{ marginBottom: "10px" }}>
+  <label>Joining Date: </label>
+  <input
+    type="date"
+    name="joiningDate"
+    value={formik.values.joiningDate}
+    onChange={formik.handleChange}
+    
+  />
+  {formik.touched.joiningDate && formik.errors.joiningDate && (
+    <div style={{ color: "red" }}>{formik.errors.joiningDate}</div>
+  )}
+</div>
+
+
+{/* Work location */}
+
+<div style={{ marginBottom: "10px" }}>
+<Select
+  name="workLocation"
+  options={locationOptions}
+  value={locationOptions.find(option => option.value === formik.values.workLocation)}
+  onChange={(selectedOption) =>
+    formik.setFieldValue("workLocation", selectedOption ? selectedOption.value : "")
+  }
+  onBlur={() => formik.setFieldTouched("workLocation", true)}
+  placeholder="Select Work Location"
+  isClearable
+/>
+</div>
+<h2> Bank Details</h2>
+{/* Bank Account Number */}
+<div style={{ marginBottom: "10px" }}>
+  <label>Bank Account Number: </label>
+  <input
+    type="text"
+    name="bankAccount"
+    value={formik.values.bankAccount}
+    onChange={formik.handleChange}
+  />
+  {formik.touched.bankAccount && formik.errors.bankAccount && (
+    <div style={{ color: "red" }}>{formik.errors.bankAccount}</div>
+  )}
+</div>
+
+{/* IFSC Code */}
+<div style={{ marginBottom: "10px" }}>
+  <label>IFSC Code: </label>
+  <input
+    type="text"
+    name="ifsc"
+    value={formik.values.ifsc}
+    onChange={formik.handleChange}
+  />
+  {formik.touched.ifsc && formik.errors.ifsc && (
+    <div style={{ color: "red" }}>{formik.errors.ifsc}</div>
+  )}
+</div>
+
+{/* PAN Number */}
+<div style={{ marginBottom: "10px" }}>
+  <label>PAN Number: </label>
+  <input
+    type="text"
+    name="pan"
+    value={formik.values.pan}
+    onChange={formik.handleChange}
+  />
+  {formik.touched.pan && formik.errors.pan && (
+    <div style={{ color: "red" }}>{formik.errors.pan}</div>
+  )}
+</div>
+
+{/* UPI ID (Optional) */}
+<div style={{ marginBottom: "10px" }}>
+  <label>UPI ID (Optional): </label>
+  <input
+    type="text"
+    name="upi"
+    value={formik.values.upi}
+    onChange={formik.handleChange}
+  />
+  {formik.touched.upi && formik.errors.upi && (
+    <div style={{ color: "red" }}>{formik.errors.upi}</div>
+  )}
+</div>
+
+
+<h2>Emergency contacts:</h2>
+
+<div style={{ marginBottom: "10px" }}>
+  <label>Name: </label>
+  <input
+    type="text"
+    name="emergencyName"
+    value={formik.values.emergencyName}
+    onChange={formik.handleChange}
+  />
+  {formik.touched.emergencyName && formik.errors.emergencyName && (
+    <div style={{ color: "red" }}>{formik.errors.emergencyName}</div>
+  )}
+</div>
+
+<div style={{ marginBottom: "10px" }}>
+  <label>Relation: </label>
+  <select
+    name="emergencyRelation"
+    value={formik.values.emergencyRelation}
+    onChange={formik.handleChange}
+  >
+    <option value="">Select Relation</option>
+    <option value="Parent">Parent</option>
+    <option value="Sibling">Sibling</option>
+    <option value="Spouse">Spouse</option>
+    <option value="Friend">Friend</option>
+    <option value="Other">Other</option>
+  </select>
+  {formik.touched.emergencyRelation && formik.errors.emergencyRelation && (
+    <div style={{ color: "red" }}>{formik.errors.emergencyRelation}</div>
+  )}
+</div>
+
+<div style={{ marginBottom: "10px" }}>
+  <label>Phone: </label>
+  <input
+    type="text"
+    name="emergencyPhone"
+    value={formik.values.emergencyPhone}
+    onChange={formik.handleChange}
+  />
+  {formik.touched.emergencyPhone && formik.errors.emergencyPhone && (
+    <div style={{ color: "red" }}>{formik.errors.emergencyPhone}</div>
+  )}
+</div>
+
+<h2>Document Upload:</h2>
+
+
+{/* Document Upload */}
+ 
+        <div style={{ marginBottom: "10px" }}>
+  <label>Documents (PDF only, max 5): </label>
+  <input
+    type="file"
+    name="document"
+    accept="application/pdf"
+    multiple
+    onChange={handleDocumentChange}
+  />
+  {formik.touched.document && formik.errors.document && (
+    <div style={{ color: "red" }}>{formik.errors.document}</div>
+  )}
+
+  {/* Preview list of filenames */}
+  {formik.values.document && formik.values.document.length > 0 && (
+    <ul>
+      {formik.values.document.map((file, index) => (
+        <li key={index} style={{ marginBottom: "5px" }}>
+          {file.name}{" "}
+          <button
+            type="button"
+            onClick={() => removeDocument(index)}
+            style={{
+              color: "red",
+              cursor: "pointer",
+              border: "none",
+              background: "none",
+            }}
+          >
+            Remove
+          </button>
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
+
+
+          {/* Review */}
+          
+
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  );
+};
+
+export default MyForm;
 
