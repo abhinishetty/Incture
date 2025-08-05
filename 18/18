@@ -1,1 +1,97 @@
+05.08.2025
 
+        Redux:
+Redux is a state management library commonly used with React to manage and centralize application state.
+🔁 Core Concepts of Redux:
+
+Store: The single source of truth that holds the app’s state.
+
+Actions: Plain JavaScript objects that describe what happened (e.g., { type: 'INCREMENT' }).
+
+Reducers: Pure functions that take the current state and an action and return a new state.
+
+Dispatch: The method used to send actions to the store.
+
+UI (subscriber): 
+
+
+
+========
+const initialState={
+    count:0
+}
+const counterReducer=(state=initialState,actions)=>{
+switch(actions.type){
+case 'INCREMENT':
+    return{
+        ...state,
+        count:state.count+1
+    };
+    case 'DECREMENT':
+    return{
+        ...state,
+        count:state.count-1
+    };
+    default:
+        return state;
+}
+}
+export default counterReducer
+
+
+=
+import { createStore } from "redux"
+import counterReducer from "./counterReducer"
+
+
+const store=createStore(counterReducer);
+
+
+export default store;
+
+=
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { Provider } from 'react-redux'
+import './index.css'
+import App from './App.jsx'
+import store from './redux/store.js'
+
+createRoot(document.getElementById('root')).render(
+  <Provider store={store}>
+<App/> 
+
+    </Provider>
+)
+
+
+=
+import { useSelector,useDispatch } from "react-redux"
+
+function Counter(){
+    const count=useSelector(state=>state.count)
+    const dispatch=useDispatch();
+    return(
+        <div>
+<h2>Count: {count}</h2>
+<button onClick={()=>dispatch({type:'INCREMENT'})}> Increment</button>
+<button onClick={()=>dispatch({type:'DECREMENT'})}>Decrement</button>
+        </div>
+    )
+}
+export default Counter
+
+
+Reducer manages the counter state and updates it on 'INCREMENT' and 'DECREMENT' actions.
+
+Store is created from the reducer to hold the app’s state.
+
+The Provider wraps the app to give components access to the store.
+
+In the Counter component, useSelector reads the current count, and useDispatch sends actions to update it.
+
+When buttons are clicked, actions are dispatched, the reducer updates the state, and the UI re-renders with the new count.
+
+
+
+=================================================================================
