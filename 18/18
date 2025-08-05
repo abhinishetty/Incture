@@ -95,3 +95,105 @@ When buttons are clicked, actions are dispatched, the reducer updates the state,
 
 
 =================================================================================
+
+
+
+ export const ADD_TO_CART='ADD_TO_CART'
+
+export const addToCart=(product)=>{
+    return{
+        type: ADD_TO_CART,
+        payload:product
+    }
+};
+
+
+=
+import { ADD_TO_CART } from "./action"
+const initialState={
+    cart:[]
+}
+const cartReducer=(state=initialState,action)=>{
+    switch (action.type){
+        case ADD_TO_CART:
+            return{
+                ...state,
+                cart:[...state.cart,action.payload]
+            };
+            default:
+                return state;
+    }
+}
+export default cartReducer
+=
+import { createStore } from "redux"
+import cartReducer from "./reducer"
+const store=createStore(cartReducer);
+
+
+export default store;
+
+=
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { Provider } from 'react-redux'
+import './index.css'
+import App from './App.jsx'
+//import store from './redux/store.js'
+import store from './new_redux/store.js'
+
+createRoot(document.getElementById('root')).render(
+  <Provider store={store}>
+<App/> 
+
+    </Provider>
+)
+
+=
+import {useDispatch } from "react-redux"
+import { ADD_TO_CART, addToCart } from "../new_redux/action";
+const products=[
+    {id:100,name:'IPhone',price:150000},
+    {id:200,name:'Dell_laptop',price:250000},
+    {id:300,name:'HP_laptop',price:60000},
+    {id:400,name:'Samsung_Mobile',price:25000},
+]
+
+function ProductList(){
+    const dispatch=useDispatch();
+    return(
+        <div>
+<h2>Products:</h2>
+{products.map(product=>(
+    <div key={product.id} style={{marginBottom:'10px'}}>
+        <span>{product.name}::{product.price}</span>
+        <button 
+        style={{marginLeft:'10px'}}
+         onClick={()=>dispatch(addToCart(product))}>Add to cart</button>
+
+        </div>
+))}
+        </div>
+    )
+}
+export default ProductList
+=
+import { useSelector } from "react-redux";
+function Cart(){
+    const cartItems=useSelector(state=>state.cart);
+    return(
+        <div>
+            <h2>Cart Page</h2>
+            {cartItems.length===0 && <p>Cart is empty</p>}
+            <ul>
+                {cartItems.map((items,index)=>(
+                    <li key={index}>{items.name}:{items.price} Rupees</li>
+               ) )}
+            </ul>
+        </div>
+    )
+}
+export default Cart
+
+
+=======================================
