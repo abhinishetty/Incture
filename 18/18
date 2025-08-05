@@ -393,3 +393,67 @@ createRoot(document.getElementById('root')).render(
 )
 
 
+================
+(or) reducer code 
+import { ADD_TO_CART, REMOVE_FROM_CART } from "./action";
+
+const initialState = {
+  cart: []
+};
+
+const cartReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case ADD_TO_CART: {
+      const existingItem = state.cart.find(item => item.id === action.payload.id);
+
+      if (existingItem) {
+        // If item already in cart, increase quantity
+        return {
+          ...state,
+          cart: state.cart.map(item =>
+            item.id === action.payload.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          )
+        };
+      }
+
+      // If item not in cart, add it with quantity 1
+      return {
+        ...state,
+        cart: [...state.cart, { ...action.payload, quantity: 1 }]
+      };
+    }
+
+    case REMOVE_FROM_CART: {
+      const existingItem = state.cart.find(item => item.id === action.payload);
+
+      if (!existingItem) return state;
+
+      if (existingItem.quantity > 1) {
+        // Decrease quantity
+        return {
+          ...state,
+          cart: state.cart.map(item =>
+            item.id === action.payload
+              ? { ...item, quantity: item.quantity - 1 }
+              : item
+          )
+        };
+      }
+
+      // Remove item completely if quantity is 1
+      return {
+        ...state,
+        cart: state.cart.filter(item => item.id !== action.payload)
+      };
+    }
+
+    default:
+      return state;
+  }
+};
+
+export default cartReducer;
+
+
