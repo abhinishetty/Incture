@@ -196,3 +196,200 @@ export default Cart
 
 
 =======================================
+
+Full cart:
+import { useSelector, useDispatch } from "react-redux";
+import { addToCart, removeFromCart } from "../new_redux/action";
+
+function Cart() {
+  const cartItems = useSelector(state => state.cart);
+  const dispatch = useDispatch();
+
+  let total = 0;
+  for (let item of cartItems) {
+    total += item.price * item.quantity;
+  }
+
+  return (
+    <div>
+      <h2>Cart Page</h2>
+      {cartItems.length === 0 && <p>Cart is empty</p>}
+      <ul>
+        {cartItems.map((item) => (
+          <li key={item.id}>
+            {item.name} - ₹{item.price} x {item.quantity} = ₹{item.price * item.quantity}
+
+            <button
+              style={{ marginLeft: "10px", color: "red" }}
+              onClick={() => dispatch(removeFromCart(item.id))}
+            >
+              Remove from Cart
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <h3>Total: ₹{total}</h3>
+    </div>
+  );
+}
+
+export default Cart;
+
+=
+import { useSelector,useDispatch } from "react-redux"
+
+function Counter(){
+    const count=useSelector(state=>state.count)
+    const dispatch=useDispatch();
+    return(
+        <div>
+<h2>Count: {count}</h2>
+<button onClick={()=>dispatch({type:'INCREMENT'})}> Increment</button>
+<button onClick={()=>dispatch({type:'DECREMENT'})}>Decrement</button>
+        </div>
+    )
+}
+export default Counter
+=
+import {useDispatch } from "react-redux"
+import { ADD_TO_CART, addToCart } from "../new_redux/action";
+const products=[
+    {id:100,name:'IPhone',price:150000},
+    {id:200,name:'Dell_laptop',price:250000},
+    {id:300,name:'HP_laptop',price:60000},
+    {id:400,name:'Samsung_Mobile',price:25000},
+]
+
+function ProductList(){
+    const dispatch=useDispatch();
+    return(
+        <div>
+<h2>Products:</h2>
+{products.map(product=>(
+    <div key={product.id} style={{marginBottom:'10px'}}>
+        <span>{product.name}::{product.price}</span>
+        <button 
+        style={{marginLeft:'10px',color:'green'}}
+         onClick={()=>dispatch(addToCart(product))}>Add to cart</button>
+
+        </div>
+))}
+        </div>
+    )
+}
+export default ProductList
+=
+ export const ADD_TO_CART='ADD_TO_CART'
+export const REMOVE_FROM_CART='REMOVE_FROM_CART'
+export const addToCart=(product)=>{
+    return{
+        type: ADD_TO_CART,
+        payload:product
+    }
+};
+export const removeFromCart=(productId)=>{
+    return{
+        type: REMOVE_FROM_CART,
+        payload:productId
+    }
+};
+
+=
+import { ADD_TO_CART, REMOVE_FROM_CART } from "./action";
+
+const initialState = {
+  cart: []
+};
+
+const cartReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case ADD_TO_CART: {
+      const existingProduct = state.cart.find(item => item.id === action.payload.id);
+
+      if (existingProduct) {
+        return {
+          ...state,
+          cart: state.cart.map(item =>
+            item.id === action.payload.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          ),
+        };
+      } else {
+        return {
+          ...state,
+          cart: [...state.cart, { ...action.payload, quantity: 1 }],
+        };
+      }
+    }
+
+    case REMOVE_FROM_CART: {
+      
+      const existingProduct = state.cart.find(item => item.id === action.payload);
+
+      if (!existingProduct) return state; 
+
+      if (existingProduct.quantity > 1) {
+       
+        return {
+          ...state,
+          cart: state.cart.map(item =>
+            item.id === action.payload
+              ? { ...item, quantity: item.quantity - 1 }
+              : item
+          ),
+        };
+      } else {
+        
+      }
+    }
+
+    default:
+      return state;
+  }
+};
+
+export default cartReducer;
+=
+import { createStore } from "redux"
+import cartReducer from "./reducer"
+const store=createStore(cartReducer);
+
+
+export default store;
+=
+//import Counter from './components/Counter'
+import ProductList from './components/ProductList'
+import Cart from './components/Cart'
+import './App.css'
+
+function App() {
+ return(
+  <div>
+  <h1>Redux: state management</h1>  
+  <ProductList/>
+  <Cart/>
+  </div>
+ )
+}
+
+export default App
+
+=
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { Provider } from 'react-redux'
+import './index.css'
+import App from './App.jsx'
+//import store from './redux/store.js'
+import store from './new_redux/store.js'
+
+createRoot(document.getElementById('root')).render(
+  <Provider store={store}>
+<App/> 
+
+    </Provider>
+)
+
+
