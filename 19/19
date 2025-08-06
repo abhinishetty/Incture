@@ -167,7 +167,7 @@ without useEffect
 
 
 Axios:promise based http client thatis used because of its cleaner syntax and additional features compated to fetch
-
+npm install axios
 
 import { useState,useEffect } from "react";
 import axios from "axios";
@@ -224,3 +224,12 @@ function App() {
 }
 
 export default App
+==========================
+
+MiddleWare:
+Middleware is software that sits between two systems or layers and processes data or requests before passing them along.
+
+npm install redux-thunk
+
+
+
