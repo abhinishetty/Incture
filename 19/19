@@ -34,7 +34,7 @@ function UserList() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/users")
+    fetch("https://jsonplaceholder.typicode.com/users")   //check by putting wrong url
       .then((response) => {
         if (!response.ok) {
           throw new Error("Something went wrong...");
