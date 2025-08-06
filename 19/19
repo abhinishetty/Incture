@@ -363,3 +363,106 @@ export default App
 ===================================
 
 Error handling
+
+function FirstError(props){
+   
+    return(
+        <div>
+            <h2>This is a first component From Error</h2>
+            <h3>{props.name}</h3>
+        </div>
+    )
+}
+export default FirstError
+
+=
+import FirstError from "./error/FirstError"
+function App() {
+ return(
+  <div>
+  <h1>API Fetching IN React</h1>  
+  <FirstError name="Abhini"/>
+  </div>
+ )
+}
+
+export default App
+
+===============================
+function FirstError(props){
+    throw new Error("Somethingsss broken................")
+    return(
+        <div>
+            <h2>This is a first component From Error</h2>
+            <h3>{props.name}</h3>
+        </div>
+    )
+}
+export default FirstError
+=
+import FirstError from "./error/FirstError"
+function App() {
+ return(
+  <div>
+  <h1>API Fetching IN React</h1>  
+  <FirstError name="Abhini"/>
+  </div>
+ )
+}
+
+export default App
+
+==============================================
+
+function FirstError(props){
+    try{
+    throw new Error("Somethingsss broken................")  //
+    }
+    catch(error){
+return <p>Some Error Occured in First Error Component.......</p>
+    }
+    return(
+        <div>
+            <h2>This is a first component From Error</h2>
+            <h3>{props.name}</h3>
+        </div>
+    )
+}
+export default FirstError
+If an error is thrown, the component renders the error message from the catch block.
+If no error occurs, it renders the normal JSX with the heading and name.
+
+=
+import FirstError from "./error/FirstError"
+function App() {
+ return(
+  <div>
+  <h1>API Fetching IN React</h1>  
+  <FirstError name="Abhini"/>
+  </div>
+ )
+}
+
+export default App
+
+
+===============================================
+src/
+│
+├── api/
+│   ├── User.jsx                # Fetch API with useEffect
+│   ├── SecondUserList.jsx      # Fetch API with manual fetch button
+│   └── UserListAxios.jsx       # Axios fetch API example
+│
+├── middleware/
+│   ├── store.js                # Redux store with thunk
+│   ├── userAction.js           # Redux async actions
+│   ├── userReducer.js          # Redux reducer
+│   └── Fetch.jsx               # React component using Redux state
+│
+├── error/
+│   └── FirstError.jsx          # Error handling example component
+│
+├── App.jsx                     # Main app component (switch imports as needed)
+├── index.jsx                   # React DOM render + Redux Provider
+└── ...
