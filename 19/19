@@ -1,1 +1,25 @@
+06.08.2025          API
+
+Rest API: REST stands for Representational State Transfer.
+
+Statelessness
+
+JSON: 
+Postman
+
+Status: 3 digit number
+ HTTP status codes:
+
+200 OK — Success, data returned
+
+201 Created — Resource created successfully
+
+204 No Content — Success, no data to return
+
+400 Bad Request — Client sent invalid request
+
+401 Unauthorized — Authentication required or failed
+
+500 Internal Server Error — Server encountered an error
+
 
