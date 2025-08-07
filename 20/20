@@ -1,1 +1,479 @@
+Error Boundary
 
+
+function FirstError(props){
+   // try{
+    throw new Error("Somethingsss broken................")
+  //  }
+//     catch(error){
+// return <p>Some Error Occured in First Error Component.......</p>
+//     }
+    return(
+        <div>
+            <h2>This is a first component From Error</h2>
+            <h3>{props.name}</h3>
+        </div>
+    )
+}
+export default FirstError
+
+========================
+import Second from "./Second"
+
+
+function FirstError(props){
+  // try{
+    throw new Error("Somethingsss broken................")
+ //  }
+  //  catch(error){
+
+    //  return <p>Some Error Occured in First Error Component.......</p>
+  //  }
+    return(
+        <div>
+            <h2>This is a first component From Error</h2>
+            <h3>{props.name}</h3>
+            <Second/>
+        </div>
+    )
+}
+export default FirstError
+=
+function Second(){
+    throw new Error("An error occured in second component")
+    return(
+        <div>
+            <h2>Second Component :</h2>
+        </div>
+    )
+}
+export default Second
+=
+import React from "react";
+
+class ErrorBoundary extends React.Component{
+    constructor(props)
+{
+    super(props)
+    this.state={
+        hasError:false,
+       
+    }
+}
+    static getDerivedStateFromError(error){
+return {hasError:true};
+    }
+componentDidCatch(error,errorInfo){
+    console.log("error caught by error boundary",error,errorInfo);
+}
+render(){
+    if(this.state.hasError){
+        return<h2>Something went wrong: Please try After Sometime....</h2>
+    }
+    return this.props.children;
+}
+
+
+
+}
+
+export default ErrorBoundary
+=
+// import Counter from './components/Counter'
+// import ProductList from './components/ProductList'
+// import Cart from './components/Cart'
+import './App.css'
+// import UserList from './api/User'
+// import SecondUserList from './api/SecondUsserList'
+// import UserListAxios from './api/UserListAxios'
+// import Fetch from "./middleware/Fetch"
+import FirstError from "./error/FirstError"
+import Second from './error/Second'
+import ErrorBoundary from './error/ErrorBoundary'
+function App() {
+ return(
+  <div>
+  <h1>API Fetching IN React</h1>  
+  <ErrorBoundary> <FirstError />
+  <Second/></ErrorBoundary>
+ 
+  </div>
+ )
+}
+
+export default App
+
+==========================================
+
+TypeScript:
+
+
+
+import './App.css'
+
+function App() {
+ 
+
+  return (
+    <div>
+      <h2>React with Typescript</h2>
+    </div>
+  )
+   
+  }
+
+export default App
+
+====================
+
+npm create vite@latest mt_ts -- --template typescript
+cd mt_ts
+React ,typescript
+npm install
+npm run dev
+
+
+import './App.css'
+import Data from './Data'
+
+function App() {
+ 
+  return (
+    <div>
+      <h2>React with Typescript</h2>
+      <Data/>
+    </div>
+  )
+   
+  }
+
+export default App
+
+
+====
+
+function Data(){
+    let username:string="abhi";
+    let age:number=20;
+    //age=true
+    let isActive:boolean=true;
+    return(
+<div>
+<h2>User profile</h2>
+<p>Name:{username}</p>
+<p>Age: {age}</p>
+<p>Is Active : {isActive?"Yes":"No"}</p>
+
+</div>
+
+    )
+}
+export default Data
+
+=================
+
+
+
+
+function Data(){
+    let username:string="abhi";
+    let age:number=20;
+ const course:string[]=["React","Angular","Vue"]//here we can declare only strings
+    let isActive:boolean=true;
+    return(
+<div>
+<h2>User profile</h2>
+<p>Name:{username}</p>
+<p>Age: {age}</p>
+<p>Is Active : {isActive?"Yes":"No"}</p>
+
+<ul>
+    {
+        course.map((c,index)=>(
+            <li key={index}>
+                {c}
+            </li>
+        ))
+    }
+</ul>
+</div>
+
+    )
+}
+export default Data
+
+
+===================================
+
+
+
+function Data(){
+    let username:string="abhi";
+    let age:number=20;
+ const course:string[]=["React","Angular","Vue"]//here we can declare only strings
+
+type Employee={
+    id:number,
+    name:string,
+    city:string;
+}
+
+
+
+
+const emp1:Employee={
+    id:100,
+    name:"Abhi",
+    city:"Udupi"
+}
+
+
+    let isActive:boolean=true;
+    return(
+<div>
+<h2>User profile</h2>
+<p>Name:{username}</p>
+<p>Age: {age}</p>
+<p>Is Active : {isActive?"Yes":"No"}</p>
+<p>Employee Id: {emp1.id}</p>
+<p>Employee name: {emp1.name}</p>
+<p>Employee city : {emp1.city}</p>
+<ul>
+    {
+        course.map((c,index)=>(
+            <li key={index}>
+                {c}
+            </li>
+        ))
+    }
+</ul>
+</div>
+
+    )
+}
+export default Data
+
+=========
+
+import PrompComp from './PropComp'
+function App() {
+  // const [count, setCount] = useState(0)
+
+  return (
+    <div>
+      <h2>React with Typescript</h2>
+     <PrompComp name="Abhini"/>
+    </div>
+  )
+   
+  }
+
+export default App
+
+=
+
+interface MyProps{
+    name:string;
+}
+const PropComp:React.FC<MyProps>=({name})=>{
+    return(
+        <div>
+<h2>PrompComp  in typescript</h2>
+<p>Name:{name}</p>
+
+        </div>
+    )
+
+}
+
+
+// function PrompComp(props){
+
+
+//     return(
+//         <div>
+//             <h2>Promp Comp in TypeScript:</h2>
+//             <p>Name:{props.name}</p>
+//         </div>
+//     )
+// }
+export default PropComp
+============
+
+interface MyProps{
+    name:string;
+}
+//const PropComp:React.FC<MyProps>=({name})=>{
+const PropComp=(props:MyProps)=>{
+    return(
+        <div>
+<h2>PrompComp  in typescript</h2>
+<p>Name:{props.name}</p>
+
+        </div>
+    )
+
+}
+
+
+
+export default PropComp
+
+===========
+import Button from './Button'
+
+function App() {
+const handleClick=()=>{
+  alert("Button clicked")
+}
+
+  return (
+    <div>
+      <h2>React with Typescript</h2>
+     <Button label='Click' onClick={handleClick}/>
+      <Button label='Disabled Button' onClick={handleClick}disabled/>
+    </div>
+  )
+   
+  }
+
+export default App
+=
+interface ButtonProps{
+    label:string;
+    onClick:()=>void;
+    disabled ?:boolean;
+}
+
+const Button:React.FC<ButtonProps>=({label,onClick,disabled=false})=>{
+    return(
+        <button onClick={onClick}disabled={disabled}>
+            {label}
+        </button>
+    )
+}
+export default Button
+
+This React + TypeScript app defines a reusable Button component with typed props (label, onClick, disabled). 
+The App component renders two buttons, one active and one disabled, both triggering an alert on click.
+============================
+
+interface CardProps{
+    children:React.ReactNode;
+    style?:React.CSSProperties;
+}
+const Card:React.FC<CardProps>=({children,style})=>{
+    return(
+        <div style={{padding:'20px',
+        border:'1px solid gray',
+        borderRadius:'8px',
+        ...style}}>
+            {children}
+
+
+        </div>
+    )
+}
+export default Card
+=
+import Card from './Card'
+function App() {
+
+
+  return (
+    <div>
+      <h2>React with Typescript</h2>
+      <Card>
+        <h3>Card Tittle</h3>
+        <p>This is a simple  ard with custom styles</p>
+      </Card>
+        <Card style={{background:'emrald',marginTop:'20px'}}>
+        <h3>Styled card </h3>
+        <p>This is a card has custom styles passed via props</p>
+      </Card>
+     
+    </div>
+  )
+   
+  }
+
+export default App
+========
+import StateComp from './StateComp'
+function App() {
+
+
+  return (
+    <div>
+    <StateComp/>
+    </div>
+  )
+   
+  }
+
+export default App
+
+=
+import { useState } from "react";
+function StateComp(){
+    const handleClick=()=>{
+        setCount(count+1)
+    }
+
+    const[count,setCount]=useState<number>(0)
+    return(
+        <div>
+<h3>Count: {count}</h3>
+<button onClick={handleClick}>Increment</button>
+        </div>
+    )
+}
+export default StateComp
+============
+import { useState } from "react";
+
+
+interface FormData{
+    name:string;
+    email:string;
+}
+
+function FormComp(){
+    const [form,setForm]=useState<FormData>({
+    name:'',
+    email:''
+    })
+    const handleChange=(event:React.ChangeEvent<HTMLInputElement>)=>{
+        const{name,value}=event.target;
+        setForm({
+         ...form,
+         [name]:value
+        })
+    }
+
+    
+    return (
+        <div>
+<h2>User Form</h2>
+<input
+name="name"
+value={form.name}
+onChange={handleChange}
+placeholder="Enter name"/> <br></br>
+
+<input
+name="email"
+value={form.email}
+onChange={handleChange}
+placeholder="Enter email"/> <br></br>
+
+
+<p>Name:{form.name}</p>
+<p>Email:{form.email}</p>
+        </div>
+    )
+}
+export default FormComp
+=====================
+
+npm install -D typescript @react-native/typescript-config @types/jest @types/react @types/react-test-renderer
