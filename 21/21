@@ -1,1 +1,32 @@
 
+function workOut(time){
+   
+    let hour=time[0]+time[1];
+    let min= time[3] +time[4];
+    let period=time[6]+time[7]
+h=parseInt(hour);
+m=parseInt(min)
+if((h>5&&h<=9)&&period=="AM"){
+    console.log("cardio session")
+}
+else if((h>=10&&h<=11)&&period=="AM"||((h==12&&m==0)&&period=="PM")){
+console.log("strength training")
+}
+else if(((h==12&&m!=0)||(h<5)||(h==5&&m==0))&&period=="PM"){
+    console.log(" yoga and flexiblity ")
+}
+else if(((h==5&&m>0)||(h>5&&(h<8&&m==0)))&&period=="PM"){
+    console.log("high-intensity interval training")
+
+}
+else {
+    console.log("light  streching and cool down")
+}
+}
+workOut("06:30 AM")
+workOut("10:15 AM")
+workOut("03:00 PM")
+workOut("05:45 PM")
+workOut("09:10 PM")
+
+
