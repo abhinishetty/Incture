@@ -477,3 +477,5 @@ export default FormComp
 =====================
 
 npm install -D typescript @react-native/typescript-config @types/jest @types/react @types/react-test-renderer
+npx tsx init
+
