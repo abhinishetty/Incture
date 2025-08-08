@@ -30,3 +30,187 @@ workOut("05:45 PM")
 workOut("09:10 PM")
 
 
+============================
+Testing :writing a code to check our application is working the way we expect
+
+1. manual
+2.automated
+
+to detect bug at earlier stage
+
+_ Jest
+-RTL
+
+
+import './App.css';
+
+function App() {
+  return (
+    <div className='App'>
+     <h1>React With Testing</h1>
+    </div>
+  );
+}
+
+export default App;
+
+=
+import { render,screen } from "@testing-library/react";
+import App from "./App";
+
+test("render App Component",()=>{
+render(<App/>);    //fake rendering
+const headingElement=screen.getByText(/React With Testing/i);
+expect(headingElement).toBeInTheDocument();
+
+
+
+})
+=
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+npm run test
+
+=============
+
+
+import './App.css';
+import Counter from './Counter';
+function App() {
+  return (
+    <div className='App'>
+     <h1>React With Testing</h1>
+     <Counter/>
+    </div>
+  );
+}
+
+export default App;
+
+=
+import { useState } from "react";
+function Counter(){
+    const[count,setCount]=useState(0);
+    return(
+        <div>
+            <p>You Clicked Button {count} Times</p>
+            <button onClick={()=>setCount(count+1)}>Click Me</button>
+        </div>
+    )
+}
+export default Counter
+=
+import { fireEvent, render,screen } from "@testing-library/react";
+
+import Counter from "./Counter";
+
+test("Counter Components working properly ",()=>{
+    render(<Counter/>);
+    const buttonElement=screen.getByText(/Click Me/i)
+    fireEvent.click(buttonElement)      //stimualte button click event
+    const updatedCount=screen.getByText(/You Clicked Button 1 Times/i)   //put 10 u will gwt error
+    expect(updatedCount).toBeInTheDocument();
+    
+});
+
+================
+import { useState } from "react";
+function Counter(){
+    const[count,setCount]=useState(0);
+    const handleClick=()=>{
+        setCount(prev => prev + 1);
+    }
+    return(
+        <div>
+            <h3>Count :{count}</h3>
+            <p>You Clicked Button {count} Times</p>
+           <button onClick={handleClick}>Click Me</button>
+
+        </div>
+    )
+}
+export default Counter
+=
+import { fireEvent, render,screen } from "@testing-library/react";
+
+import Counter from "./Counter";
+import userEvent from "@testing-library/user-event";
+
+test("Counter Components working properly ",()=>{
+    render(<Counter/>);
+    const buttonElement=screen.getByText(/Click Me/i)
+    fireEvent.click(buttonElement)      //stimualte button click event
+    const updatedCount=screen.getByText(/You Clicked Button 1 Times/i)
+    expect(updatedCount).toBeInTheDocument();
+
+
+});
+
+test("Checking Button Functionality",async()=>{
+    render(<Counter/>);
+    expect(screen.getByText(/Count :0/i)).toBeInTheDocument();
+    const button=screen.getByRole("button",{name: /Click Me/i});
+    await userEvent.click(button)
+    expect(screen.getByText(/Count :1/i)).toBeInTheDocument();
+})
+===================================
+import { useState } from "react";
+function Calculator(){
+    const[num1,setNum1]=useState('');
+    const[num2,setNum2]= useState('');
+    const[result,setResult]=useState(null);
+    const add=()=>setResult(Number(num1)+Number(num2));
+    return(
+        <div>
+            <h3>Simple Calculator </h3>
+            <input
+            type="number"
+            placeholder="First Number"
+            value={num1}
+            onChange={(e)=>setNum1(e.target.value)}
+           data-testid="num1"
+            />
+
+             <input
+            type="number"
+            placeholder="Second Number"
+            value={num2}
+            onChange={(e)=>setNum2(e.target.value)}
+           data-testid="num2"
+            />
+
+            <button onClick={add}>Add</button>
+
+           {result !== null && (
+        <h3 data-testid="result">Result: {result}</h3>
+      )}
+
+        </div>
+    )
+}
+export default Calculator
+
+=
+import { fireEvent, render,screen } from "@testing-library/react";
+import Calculator from "./Calculator";
+
+test("Check Add : ",()=>{
+render(<Calculator/>)
+fireEvent.change(screen.getByTestId("num1"),{target:{value: "5"}});
+fireEvent.change(screen.getByTestId("num2"),{target:{value: "45"}});
+fireEvent.click(screen.getByText(/Add/i));
+ expect(screen.getByTestId("result")).toHaveTextContent("Result: 50");
+fireEvent.change(screen.getByTestId("result"));
+})
+=======================================
