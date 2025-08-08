@@ -478,4 +478,16 @@ export default FormComp
 
 npm install -D typescript @react-native/typescript-config @types/jest @types/react @types/react-test-renderer
 npx tsx init
-
+in tsconfig.json:
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+   
+    "module": "esnext",
+    "target": "es6",
+    "strict": true,
+    "moduleResolution": "node",
+   
+   
+  }
+}
