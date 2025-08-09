@@ -1,1 +1,32 @@
 
+function evaluateExpression(expr, variables, values) {
+    // Replace variables with their values
+    for (let i = 0; i < variables.length; i++) {
+        const regex = new RegExp(`\\b${variables[i]}\\b`, 'g');
+        expr = expr.replace(regex, values[i]);
+    }
+
+    // Replace sqrt(...) with Math.sqrt(...)
+    expr = expr.replace(/sqrt\s*\(/g, 'Math.sqrt(');
+
+    try {
+        const result = eval(expr);
+        // If result is NaN or imaginary (e.g., sqrt of negative)
+        if (isNaN(result)) return -1;
+        return Math.round(result * 100) / 100;
+    } catch {
+        return -1;
+    }
+}
+
+
+(or)
+
+function evaluateExpression(expr, vars, vals) {
+  for (let i = 0; i < vars.length; i++) {
+    expr = expr.replace(new RegExp(`\\b${vars[i]}\\b`, 'g'), vals[i]);
+  }
+  expr = expr.replace(/sqrt\s*\(/g, 'Math.sqrt(');
+  let result = Function(`return ${expr}`)();
+  return isNaN(result) ? -1 : Math.round(result * 100) / 100;
+}
