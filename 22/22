@@ -30,3 +30,45 @@ function evaluateExpression(expr, vars, vals) {
   let result = Function(`return ${expr}`)();
   return isNaN(result) ? -1 : Math.round(result * 100) / 100;
 }
+
+====================
+create react app using vite
+
+https://dev.to/teyim/effortless-testing-setup-for-react-with-vite-typescript-jest-and-react-testing-library-1c48
+
+npm install -D jest @testing-library/react ts-jest @types/jest ts-node @testing-library/jest-dom jest-environment-jsdom @testing-library/user-event
+jest.setup.ts
+import "@testing-library/jest-dom";
+jest.config.js
+export default {
+  testEnvironment: "jsdom",
+  transform: {
+    "^.+\\.tsx?$": "ts-jest",
+  },
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+};
+
+inside pacage .json inside styles  write this  "test":"jest",
+    "coverage":"jest --coverage" hence,
+"scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "test":"jest",
+    "coverage":"jest --coverage"
+  },
+
+https://jestjs.io/docs/tutorial-react
+npm install --save-dev jest babel-jest @babel/preset-env @babel/preset-react react-test-renderer
+
+babel.config.js =>rename babel.config.cjs
+
+module.exports = {
+  presets: [
+    '@babel/preset-env',
+    ['@babel/preset-react', {runtime: 'automatic'}],
+  ],
+};
+
+
